@@ -1,0 +1,30 @@
+#! /usr/bin/env python3
+# Import the requests library
+import requests
+import sys
+
+# Create a function called get_repos that takes in a username
+def get_repos(username):
+    # Use the requests library to GET the URL
+    response = requests.get("https://api.github.com/users/" + username + "/repos")
+    # Convert the JSON data to a dictionary
+    data = response.json()
+    # Return the dictionary
+    return data
+
+# check if the user has provided a username
+if len(sys.argv) > 1:
+    username = sys.argv[1]
+    # Print the number of repos
+else:
+    print("Please provide a username")
+    sys.exit(1)
+
+data = get_repos(username)
+print("Number of Repos: ",len(data))
+
+for i in range(len(data)):
+    name = data[i]["name"]
+    description = data[i]["description"]
+    url = data[i]["html_url"]
+    print(f"Name: {name} \n\tDesc: {description}\n\tURL: {url}\n")
