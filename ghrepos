@@ -2,7 +2,9 @@
 # Import the requests library
 import requests
 from colorama import Fore
+import textwrap
 import sys
+import os
 
 # Create a function called get_repos that takes in a username
 def get_repos(username):
@@ -24,10 +26,16 @@ else:
 data = get_repos(username)
 print(Fore.CYAN + "Number of Repos: ",len(data))
 
+size = os.get_terminal_size()
+wrapper = textwrap.TextWrapper(size.columns - int(size.columns / 8))
+
 for i in range(len(data)):
     name = data[i]["name"]
     description = data[i]["description"]
     url = data[i]["html_url"]
+    wrapper_list = wrapper.wrap(text=str(description))
     print(Fore.CYAN + "Name: " + Fore.LIGHTBLUE_EX + str(name))
-    print(Fore.CYAN + "\tDesc: " + Fore.LIGHTYELLOW_EX + str(description))
+    print(Fore.CYAN + "\tDesc: ")
+    for line in wrapper_list:
+        print("\t" + Fore.LIGHTYELLOW_EX + line)
     print(Fore.CYAN + "\tURL: " + Fore.GREEN + str(url))
